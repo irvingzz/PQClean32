@@ -46,8 +46,8 @@ class cmpFile:
                 cmpreses.append(cmpres)
                 counter +=1
         return cmpreses
-filename1 = '/home/irving2/PQC/签名算法32/dilithium2_32/bin_dilithium2_clean/sign_dilithium2_riscv.elf.log'
-filename2 = '/home/irving2/PQC/签名算法/dilithium2/bin_dilithium2_clean/sign_dilithium2_riscv.elf.log'
+filename1 = '/home/irving2/PQC/PQclean32/bin_falcon-512-fp_clean/sign_falcon-512-fp_riscv.elf.log'
+filename2 = '/home/irving2/PQC/签名算法32/falcon-512_32/bin_falcon-512_clean/sign_falcon512_riscv.elf.log'
 if __name__ == '__main__':
     cmpfile = cmpFile(filename1, filename2)
     difflines = cmpfile.compare()

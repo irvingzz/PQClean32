@@ -2,7 +2,7 @@
 
 # override as desired
 TYPE=sign
-SCHEME=dilithium2
+SCHEME=falcon-512-fp
 IMPLEMENTATION=clean
 
 ISA_XLEN  = 32
