@@ -10,7 +10,7 @@ ISA_BASE  = rv$(ISA_XLEN)ima
 ISA_EXT   = 
 ISA_STR   = $(ISA_BASE)$(ISA_EXT)
 GNU_STRING= riscv$(ISA_XLEN)-unknown-elf
-COMPILER_PATH=/opt/riscv32-rv32imac
+COMPILER_PATH=$(RISCV)
 CC        = $(COMPILER_PATH)/bin/$(GNU_STRING)-gcc
 CXX       = $(COMPILER_PATH)/bin/$(GNU_STRING)-g++
 AS        = $(COMPILER_PATH)/bin/$(GNU_STRING)-as 
@@ -19,6 +19,7 @@ AR        = $(COMPILER_PATH)/bin/$(GNU_STRING)-ar
 OBJDUMP   = $(COMPILER_PATH)/bin/$(GNU_STRING)-objdump
 
 pk=$(RISCV)/riscv64-unknown-elf/bin/pk
+spike=$(RISCV)/riscv64-unknown-elf/bin/spike
 
 SCHEME_DIR=../crypto_$(TYPE)/$(SCHEME)/$(IMPLEMENTATION)
 
@@ -37,7 +38,7 @@ CFLAGS=-g -DRV_ISA=$(ISA_STR) -I$(COMMON_DIR) $(EXTRAFLAGS)
 all: $(DEST_DIR)/$(TYPE)_$(SCHEME)_riscv.elf
 
 $(SCHEME_LIBRARY): $(SCHEME_FILES)
-	cd $(SCHEME_DIR) && $(MAKE)
+	cd $(SCHEME_DIR) && $(MAKE) COMPILER_PATH=$(COMPILER_PATH)
 
 $(DEST_DIR)/$(TYPE)_$(SCHEME)_riscv.elf: $(SCHEME_LIBRARY) crypto_$(TYPE)/$(TYPE)_$(SCHEME).c $(COMMON_FILES) $(COMMON_DIR)/notrandombytes.c $(COMMON_HEADERS)
 	mkdir -p $(DEST_DIR)
@@ -45,7 +46,7 @@ $(DEST_DIR)/$(TYPE)_$(SCHEME)_riscv.elf: $(SCHEME_LIBRARY) crypto_$(TYPE)/$(TYPE
 	$(OBJDUMP) -D $(ELFNAME) > $(ELFNAME).dump
 
 run: $(ELFNAME)
-	$(RISCV)/bin/spike --isa=rv32 \
+	$(spike) --isa=rv32 \
         $(pk) $(ELFNAME) | tee  $(ELFNAME).log
 
 dump: $(ELFNAME)
