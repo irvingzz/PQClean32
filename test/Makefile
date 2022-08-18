@@ -19,7 +19,7 @@ AR        = $(COMPILER_PATH)/bin/$(GNU_STRING)-ar
 OBJDUMP   = $(COMPILER_PATH)/bin/$(GNU_STRING)-objdump
 
 pk=$(RISCV)/riscv64-unknown-elf/bin/pk
-spike=$(RISCV)/riscv64-unknown-elf/bin/spike
+spike=$(RISCV)/bin/spike
 
 SCHEME_DIR=../crypto_$(TYPE)/$(SCHEME)/$(IMPLEMENTATION)
 
