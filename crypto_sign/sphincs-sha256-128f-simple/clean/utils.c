@@ -17,7 +17,7 @@ void PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_ull_to_bytes(
     /* Iterate over out in decreasing order, for big-endianness. */
     for (uint32_t i = outlen; i > 0; i--) {
         out[i - 1] = in.t[0] & 0xff;
-        in = shr(in, 8);
+        in = uint64_s_shr(in, 8);
     }
 }
 

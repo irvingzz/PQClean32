@@ -2,9 +2,6 @@
 #define ___STRUCT64_H___
 #include <stdint.h>
 
-#define uint64_s_shr(x,c)   shr(x,c)
-#define uint64_s_shl(x,c)   shl(x,c)
-
 typedef struct 
 {
     /* data */
@@ -25,9 +22,9 @@ uint64_s uint32_t_mul(uint32_t x, uint32_t y);
 
 uint64_s int32_t_mul(int32_t x, int32_t y);
 
-uint64_s shr(uint64_s x,uint32_t c);
+uint64_s uint64_s_shr(uint64_s x,uint32_t c);
 
-uint64_s shl(uint64_s x,uint32_t c);
+uint64_s uint64_s_shl(uint64_s x,uint32_t c);
 
 uint64_s uint64_s_or(uint64_s x, uint64_s y);
 

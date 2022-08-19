@@ -167,7 +167,7 @@ void PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_hash_message(
     // print_uint64_s(tree,1);
     // printf("\n");
     
-    tmp = shr((uint64_s){~(uint32_t)0,~(uint32_t)0}, (64 - PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_BITS));
+    tmp = uint64_s_shr((uint64_s){~(uint32_t)0,~(uint32_t)0}, (64 - PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_BITS));
     tree->t[0] &= tmp.t[0];
     tree->t[1] &= tmp.t[1];
 

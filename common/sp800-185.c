@@ -7,14 +7,14 @@ static uint32_t left_encode(uint8_t *encbuf, uint64_s value) {
     uint32_t n, i;
     uint64_s v, tmp;
 
-    for (v = value, n = 0; v.t[0] && v.t[1] && (n < sizeof(uint64_s)); n++, v = shr(v, 8)) {
+    for (v = value, n = 0; v.t[0] && v.t[1] && (n < sizeof(uint64_s)); n++, v = uint64_s_shr(v, 8)) {
         ; /* empty */
     }
     if (n == 0) {
         n = 1;
     }
     for (i = 1; i <= n; i++) {
-        tmp = shr(value, (8 * (n-i)));
+        tmp = uint64_s_shr(value, (8 * (n-i)));
         encbuf[i] = (uint8_t)tmp.t[0];
     }
     encbuf[0] = (uint8_t)n;

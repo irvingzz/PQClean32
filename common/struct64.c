@@ -57,7 +57,7 @@ uint64_s rol(uint64_s a, int offset)
   return b;
 }
 
-uint64_s shr(uint64_s x,uint32_t c)
+uint64_s uint64_s_shr(uint64_s x,uint32_t c)
 {
   uint64_s a;
   if (c == 0)
@@ -99,7 +99,7 @@ uint64_s uint32_t_mul(uint32_t x, uint32_t y)
   c.t[1] = 0;
   c.t[0] = (uint32_t)a2 * b1;
   b = uint64_s_add(b,c);
-  b = shl(b,16);
+  b = uint64_s_shl(b,16);
   a = uint64_s_add(a,b);
   // if (x == 0x58F2DD48 && y == 0xffffe090)
   // {
@@ -137,7 +137,7 @@ uint64_s int32_t_mul(int32_t x, int32_t y)
   return a;
 }
 
-uint64_s shl(uint64_s x,uint32_t c)
+uint64_s uint64_s_shl(uint64_s x,uint32_t c)
 {
   uint64_s a;
   if (c == 0)
@@ -196,8 +196,8 @@ uint64_s uint64_s_mul(uint64_s x, uint64_s y)
   x0y0 = uint32_t_mul(x.t[0],y.t[0]);
   x0y1 = uint32_t_mul(x.t[0],y.t[1]);
   x1y0 = uint32_t_mul(x.t[1],y.t[0]);
-  x1y0 = shl(x1y0,32);
-  x0y1 = shl(x0y1,32);
+  x1y0 = uint64_s_shl(x1y0,32);
+  x0y1 = uint64_s_shl(x0y1,32);
   tmp = uint64_s_add(x1y0,x0y1);
   tmp = uint64_s_add(x0y0,tmp);
   // if (x.t[0] == 0x58F2DD48 && y.t[0] == 0xffffe090 && y.t[1] == 0xffffffff)

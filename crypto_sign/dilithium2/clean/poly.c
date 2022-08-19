@@ -510,7 +510,7 @@ void PQCLEAN_DILITHIUM2_CLEAN_poly_challenge(poly *c, const uint8_t seed[SEEDBYT
 
         c->coeffs[i] = c->coeffs[b];
         c->coeffs[b] = 1 - 2 * (signs.t[0] & 1);
-        signs = shr(signs, 1);
+        signs = uint64_s_shr(signs, 1);
     }
     shake256_inc_ctx_release(&state);
 }

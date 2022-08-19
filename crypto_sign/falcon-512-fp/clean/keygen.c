@@ -723,7 +723,7 @@ modp_montymul(uint32_t a, uint32_t b, uint32_t p, uint32_t p0i) {
     z = uint32_t_mul(a,b);
     w = uint32_t_mul(((z.t[0] * p0i) & (uint32_t)0x7FFFFFFF), p);
     tmp = uint64_s_add(z,w);
-    tmp = shr(tmp,31);
+    tmp = uint64_s_shr(tmp,31);
     d = tmp.t[0] - p;
     d += p & -(d >> 31);
     return d;
@@ -1172,7 +1172,7 @@ zint_mul_small(uint32_t *m, uint32_t mlen, uint32_t x) {
         tmp.t[0] = cc;
         z = uint64_s_add(z,tmp);
         m[u] = (uint32_t)z.t[0] & 0x7FFFFFFF;
-        tmp = shr(z,31);
+        tmp = uint64_s_shr(z,31);
         cc = tmp.t[0];
     }
     return cc;
@@ -1256,7 +1256,7 @@ zint_add_mul_small(uint32_t *x,
         z = uint64_s_add(z, tmp);
         z = uint64_s_add(z,tmp1);
         x[u] = (uint32_t)z.t[0] & 0x7FFFFFFF;
-        tmp = shr(z,31);
+        tmp = uint64_s_shr(z,31);
         cc = tmp.t[0];
     }
     x[len] = cc;
@@ -1889,14 +1889,14 @@ zint_bezout(uint32_t *u, uint32_t *v,
         tmp.t[0] = a0;
         tmp1.t[1] = 0;
         tmp1.t[0] = a1;
-        tmp = shl(tmp,31);
+        tmp = uint64_s_shl(tmp,31);
         a_hi = uint64_s_add(tmp, tmp1);
 
         tmp.t[1] = 0;
         tmp.t[0] = b0;
         tmp1.t[1] = 0;
         tmp1.t[0] = b1;
-        tmp = shl(tmp, 31);
+        tmp = uint64_s_shl(tmp, 31);
         b_hi = uint64_s_add(tmp, tmp1);
         
         a_lo = a[0];
@@ -2003,7 +2003,7 @@ zint_bezout(uint32_t *u, uint32_t *v,
             
             tmp = uint32_t_mul(cA,1);
             tmp = uint64_s_neg(tmp);
-            tmp1 = shr(a_hi,1);
+            tmp1 = uint64_s_shr(a_hi,1);
             tmp1 = uint64_s_xor(a_hi,tmp1);
             tmp = uint64_s_and(tmp,tmp1);
             a_hi = uint64_s_xor(a_hi,tmp);
@@ -2016,7 +2016,7 @@ zint_bezout(uint32_t *u, uint32_t *v,
             qb = uint64_s_add(qb,tmp1);
             tmp = uint32_t_mul(cA,1);
             tmp = uint64_s_sub(tmp,UINT64_S_ONE);
-            tmp1 = shr(b_hi,1);
+            tmp1 = uint64_s_shr(b_hi,1);
             tmp1 = uint64_s_xor(b_hi,tmp1);
             tmp = uint64_s_and(tmp,tmp1);
             b_hi = uint64_s_xor(b_hi,tmp);
@@ -2166,7 +2166,7 @@ zint_add_scaled_mul_small(uint32_t *x, uint32_t xlen,
          * trap representation or padding bit, and with a layout
          * compatible with that of 'uint32_t'.
          */
-        tmp = shr(z,31);
+        tmp = uint64_s_shr(z,31);
         ccu = (uint32_t)(tmp.t[0]);
         cc = *(int32_t *)&ccu;
     }
@@ -2552,12 +2552,12 @@ mkgauss(RNG_CONTEXT *rng, unsigned logn) {
         // print_uint64_s(&r,1);
         neg = (uint32_t)(r.t[1] >> 31);
         // printf("\t\t neg = %d\n",(int)neg);
-        tmp = shl(UINT64_S_ONE,63);
+        tmp = uint64_s_shl(UINT64_S_ONE,63);
         tmp = uint64_s_not(tmp);
         r = uint64_s_and(r,tmp);
         // print_uint64_s(&r,1);
         tmp = uint64_s_sub(r,gauss_1024_12289[0]);
-        tmp = shr(tmp,63);
+        tmp = uint64_s_shr(tmp,63);
         f = (uint32_t)(tmp.t[0]);
         // printf("\t\t f = %d\n",(int)f);
 
@@ -2570,7 +2570,7 @@ mkgauss(RNG_CONTEXT *rng, unsigned logn) {
         v = 0;
         r = get_rng_u64(rng);
         // print_uint64_s(&r,1);
-        tmp = shl(UINT64_S_ONE,63);
+        tmp = uint64_s_shl(UINT64_S_ONE,63);
         tmp = uint64_s_not(tmp);
         r = uint64_s_and(r,tmp);
         // print_uint64_s(&r,1);
@@ -2578,7 +2578,7 @@ mkgauss(RNG_CONTEXT *rng, unsigned logn) {
                                    / (sizeof gauss_1024_12289[0])); k ++) {
             uint32_t t;
             tmp = uint64_s_sub(r,gauss_1024_12289[k]);
-            tmp = shr(tmp,63);
+            tmp = uint64_s_shr(tmp,63);
             t = (uint32_t)(tmp.t[0]) ^ 1;
             v |= k & -(t & (f ^ 1));
             f |= t;

@@ -1053,9 +1053,9 @@ PQCLEAN_FALCON512_CLEAN_gaussian0_sampler(prng *p) {
     lo = prng_get_u64(p);
     hi = prng_get_u8(p);
     v0 = (uint32_t)lo.t[0] & 0xFFFFFF;
-    tmp = shr(lo,24);
+    tmp = uint64_s_shr(lo,24);
     v1 = (uint32_t)(tmp.t[0]) & 0xFFFFFF;
-    tmp = shr(lo,48);
+    tmp = uint64_s_shr(lo,48);
     v2 = (uint32_t)(tmp.t[0]) | (hi << 16);
 
     /*
@@ -1124,9 +1124,9 @@ BerExp(prng *p, fpr x, fpr ccs) {
      * with 51 bits of precision or so.
      */
     tmp = fpr_expm_p63(r, ccs);
-    tmp = shl(tmp,1);
+    tmp = uint64_s_shl(tmp,1);
     tmp = uint64_s_sub(tmp,UINT64_S_ONE);
-    z = shr(tmp,(uint32_t)s);
+    z = uint64_s_shr(tmp,(uint32_t)s);
 
     /*
      * Sample a bit with probability exp(-x). Since x = s*log(2) + r,
@@ -1137,7 +1137,7 @@ BerExp(prng *p, fpr x, fpr ccs) {
     i = 64;
     do {
         i -= 8;
-        tmp = shr(z,(uint32_t)i);
+        tmp = uint64_s_shr(z,(uint32_t)i);
         w = prng_get_u8(p) - ((uint32_t)(tmp.t[0]) & 0xFF);
     } while (!w && i > 0);
     return (int)(w >> 31);

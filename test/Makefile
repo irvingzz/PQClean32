@@ -54,11 +54,10 @@ dump: $(ELFNAME)
 
 .PHONY: clean
 clean:
-	$(RM)  $(DEST_DIR)/*
+	$(RM) -r $(DEST_DIR)
 
 .PHONY: cleanall
-cleanall:
-	$(RM) $(DEST_DIR)/*
+cleanall: clean
 	cd $(SCHEME_DIR) && $(MAKE) clean 
 
 .PHONY: distclean

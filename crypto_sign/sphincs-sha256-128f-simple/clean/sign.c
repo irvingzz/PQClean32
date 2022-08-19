@@ -256,7 +256,7 @@ int PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_crypto_sign_signature(
 
         /* Update the indices for the next layer. */
         idx_leaf = (tree.t[0] & ((1 << PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_HEIGHT) - 1));
-        tree = shr(tree, PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_HEIGHT);
+        tree = uint64_s_shr(tree, PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_HEIGHT);
     }
 
     *siglen = PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_BYTES;
@@ -350,7 +350,7 @@ int PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_crypto_sign_verify(
 
         /* Update the indices for the next layer. */
         idx_leaf = (tree.t[0] & ((1 << PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_HEIGHT) - 1));
-        tree = shr(tree, PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_HEIGHT);
+        tree = uint64_s_shr(tree, PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_TREE_HEIGHT);
     }
 
     PQCLEAN_SPHINCSSHA256128FSIMPLE_CLEAN_destroy_hash_function(&hash_state_seeded);

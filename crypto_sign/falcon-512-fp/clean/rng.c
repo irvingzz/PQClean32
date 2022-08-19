@@ -72,7 +72,7 @@ PQCLEAN_FALCON512_CLEAN_prng_init(prng *p, inner_shake256_context *src) {
     }
     tl.t[0] = *(uint32_t *)(p->state.d + 48);
     th.t[0] = *(uint32_t *)(p->state.d + 52);
-    *(uint64_s *)(p->state.d + 48) = uint64_s_add(tl, shl(th,32));
+    *(uint64_s *)(p->state.d + 48) = uint64_s_add(tl, uint64_s_shl(th,32));
     PQCLEAN_FALCON512_CLEAN_prng_refill(p);
 }
 

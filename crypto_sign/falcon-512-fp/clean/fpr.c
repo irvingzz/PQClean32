@@ -45,14 +45,6 @@
  * Both m and e must be simple variables (no expressions allowed).
  */
 
-#define ADD64(x,y)      (uint64_s_add(x,y))
-#define SHL64(x,c)      (shl(x,c))
-#define SHR64(x,c)      (shr(x,c))
-#define XOR64(x,y)      (uint64_s_xor(x,y))
-#define  OR64(x,y)      (uint64_s_or(x,y))
-#define AND64(x,y)      (uint64_s_and(x,y))
-
-
 #define FPR_NORM64(m, e)   do { \
         uint64_s nt = {{0,0}}; \
         uint64_s mask;  \
@@ -62,68 +54,68 @@
         nt.t[0] = m.t[1]; \
         nt.t[0] = (nt.t[0] | -nt.t[0]) >> 31; \
         mask = uint64_s_sub(nt,UINT64_S_ONE); \
-        tmp = shl(m,32); \
-        tmp = XOR64(m,tmp); \
-        tmp = AND64(tmp,mask); \
-        m = XOR64(m,tmp); \
+        tmp = uint64_s_shl(m,32); \
+        tmp = uint64_s_xor(m,tmp); \
+        tmp = uint64_s_and(tmp,mask); \
+        m = uint64_s_xor(m,tmp); \
         (e) += (int)(nt.t[0] << 5); \
         \
-        nt = (SHR64(m,48)); \
+        nt = (uint64_s_shr(m,48)); \
         nt.t[0] = (nt.t[0] | -nt.t[0]) >> 31; \
-        mask = ADD64(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
-        tmp = SHL64(m,16); \
-        tmp = XOR64(m,tmp); \
-        tmp = AND64(tmp,mask); \
-        m = XOR64(m,tmp); \
+        mask = uint64_s_add(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
+        tmp = uint64_s_shl(m,16); \
+        tmp = uint64_s_xor(m,tmp); \
+        tmp = uint64_s_and(tmp,mask); \
+        m = uint64_s_xor(m,tmp); \
         (e) += (int)(nt.t[0] << 4); \
         \
-        nt = (SHR64(m,56)); \
+        nt = (uint64_s_shr(m,56)); \
         nt.t[0] = (nt.t[0] | -nt.t[0]) >> 31; \
-        mask = ADD64(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
-        tmp = SHL64(m,8); \
-        tmp = XOR64(m,tmp); \
-        tmp = AND64(tmp,mask); \
-        m = XOR64(m,tmp); \
+        mask = uint64_s_add(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
+        tmp = uint64_s_shl(m,8); \
+        tmp = uint64_s_xor(m,tmp); \
+        tmp = uint64_s_and(tmp,mask); \
+        m = uint64_s_xor(m,tmp); \
         (e) += (int)(nt.t[0] << 3); \
         \
-        nt = (SHR64(m,60)); \
+        nt = (uint64_s_shr(m,60)); \
         nt.t[0] = (nt.t[0] | -nt.t[0]) >> 31; \
-        mask = ADD64(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
-        tmp = SHL64(m,4); \
-        tmp = XOR64(m,tmp); \
-        tmp = AND64(tmp,mask); \
-        m = XOR64(m,tmp); \
+        mask = uint64_s_add(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
+        tmp = uint64_s_shl(m,4); \
+        tmp = uint64_s_xor(m,tmp); \
+        tmp = uint64_s_and(tmp,mask); \
+        m = uint64_s_xor(m,tmp); \
         (e) += (int)(nt.t[0] << 2); \
         \
-        nt = (SHR64(m,62)); \
+        nt = (uint64_s_shr(m,62)); \
         nt.t[0] = (nt.t[0] | -nt.t[0]) >> 31; \
-        mask = ADD64(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
-        tmp = SHL64(m,2); \
-        tmp = XOR64(m,tmp); \
-        tmp = AND64(tmp,mask); \
-        m = XOR64(m,tmp); \
+        mask = uint64_s_add(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
+        tmp = uint64_s_shl(m,2); \
+        tmp = uint64_s_xor(m,tmp); \
+        tmp = uint64_s_and(tmp,mask); \
+        m = uint64_s_xor(m,tmp); \
         (e) += (int)(nt.t[0] << 1); \
         \
-        nt = (SHR64(m,63)); \
-        mask = ADD64(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
-        tmp = SHL64(m,1); \
-        tmp = XOR64(m,tmp); \
-        tmp = AND64(tmp,mask); \
-        m = XOR64(m,tmp); \
+        nt = (uint64_s_shr(m,63)); \
+        mask = uint64_s_add(nt,((uint64_s){{0xffffffff,0xffffffff}})); \
+        tmp = uint64_s_shl(m,1); \
+        tmp = uint64_s_xor(m,tmp); \
+        tmp = uint64_s_and(tmp,mask); \
+        m = uint64_s_xor(m,tmp); \
         (e) += (int)(nt.t[0]); \
     } while (0)
 
 uint64_s
 fpr_ursh(uint64_s x, int n) {
-    return shr(x,(uint32_t)n);
+    return uint64_s_shr(x,(uint32_t)n);
 }
 
 int64_s
 fpr_irsh(int64_s x, int n) {
     int64_s tmp;
     uint64_s mask;
-    tmp = shr(x,(uint32_t)n);
-    mask = shl((uint64_s){{0xffffffff,0xffffffff}},(uint32_t)(64 - n));
+    tmp = uint64_s_shr(x,(uint32_t)n);
+    mask = uint64_s_shl((uint64_s){{0xffffffff,0xffffffff}},(uint32_t)(64 - n));
     if ((x.t[1] & 0x80000000) != 0)
     {
         tmp = uint64_s_or(tmp,mask);
@@ -137,10 +129,10 @@ fpr_ulsh(uint64_s x, int n) {
 	// uint64_s tmp;
 	// printf("x\n");
 	// print_uint64_s(&x,1);
-	// tmp = shl(x,(uint32_t)n);
+	// tmp = uint64_s_shl(x,(uint32_t)n);
 	// print_uint64_s(&tmp,1);
 	// return tmp;
-    return shl(x,(uint32_t)n);
+    return uint64_s_shl(x,(uint32_t)n);
 }
 
 fpr
@@ -163,7 +155,7 @@ FPR(int s, int e, uint64_s m) {
      * If m = 0 then we want a zero; make e = 0 too, but conserve
      * the sign.
      */
-    t = shr(m,54);
+    t = uint64_s_shr(m,54);
     e &= -(int)t.t[0];
 
     /*
@@ -173,10 +165,10 @@ FPR(int s, int e, uint64_s m) {
      * exactly what we want.
      */
     t.t[0] = (uint32_t)s;
-    t = shl(t,63);
-    x = uint64_s_or(t,shr(m,2));
+    t = uint64_s_shl(t,63);
+    x = uint64_s_or(t,uint64_s_shr(m,2));
     t.t[0] = (uint32_t)e;
-    t = shl(t,52);
+    t = uint64_s_shl(t,52);
     x = uint64_s_add(x,t);
 
     /*
@@ -245,7 +237,7 @@ fpr_scaled(int64_s i, int sc) {
      * "sticky bit".
      */
     m.t[0] |= ((uint32_t)m.t[0] & 0x1FF) + 0x1FF;
-    m = shr(m,9);
+    m = uint64_s_shr(m,9);
 
     // print_uint64_s(&m,1);
     /*
@@ -253,7 +245,7 @@ fpr_scaled(int64_s i, int sc) {
      * incorrect, and we clamp e and m down to zero.
      */
     tmp = uint64_s_or(i,uint64_s_neg(i));
-    tmp = shr(tmp,63);
+    tmp = uint64_s_shr(tmp,63);
     e &= -(int)tmp.t[0];
     tmp = uint64_s_neg(tmp);
     m = uint64_s_and(m,tmp);
@@ -290,12 +282,12 @@ fpr_rint(fpr x) {
      * thus extract the mantissa as a 63-bit integer, then right-shift
      * it as needed.
      */
-    tmp = shl(x,10);
-    m = uint64_s_or(tmp, shl(UINT64_S_ONE,62));
-    tmp = shl(UINT64_S_ONE,63);
+    tmp = uint64_s_shl(x,10);
+    m = uint64_s_or(tmp, uint64_s_shl(UINT64_S_ONE,62));
+    tmp = uint64_s_shl(UINT64_S_ONE,63);
     tmp = uint64_s_sub(tmp,UINT64_S_ONE);
     m = uint64_s_and(m,tmp);
-    tmp = shr(x,52);
+    tmp = uint64_s_shr(x,52);
     e = 1085 - ((int)(tmp.t[0]) & 0x7FF);
 
 	// if(x.t[1] == 0x4152abb0 && x.t[0] == 0x2005c7fb)
@@ -339,7 +331,7 @@ fpr_rint(fpr x) {
     d = fpr_ulsh(m, 63 - e);
     dd = (uint32_t)d.t[0] | ((uint32_t)(d.t[1]) & 0x1FFFFFFF);
 
-    tmp = shr(d,61);
+    tmp = uint64_s_shr(d,61);
     f = (uint32_t)(tmp.t[0]) | ((dd | -dd) >> 31);
     tmp.t[1] = 0;
     tmp.t[0] = ((0xC8U >> f) & 1U);
@@ -348,7 +340,7 @@ fpr_rint(fpr x) {
     /*
      * Apply the sign bit.
      */
-    tmp = shr(x,63);
+    tmp = uint64_s_shr(x,63);
     tmp =uint64_s_add(uint64_s_xor(m,uint64_s_add(uint64_s_not(tmp),(uint64_s){{1,0}})),tmp);
     return tmp;
 }
@@ -368,11 +360,11 @@ fpr_floor(fpr x) {
      * absolute value to make it in the 2^62..2^63-1 range: we
      * will only need a right-shift afterwards.
      */
-    tmp = shr(x,52);
+    tmp = uint64_s_shr(x,52);
     e = (int)(tmp.t[0]) & 0x7FF;
-    t = shr(x,63);
-    tmp = uint64_s_or(shl(x,10),shl(UINT64_S_ONE,62));
-    mask = uint64_s_sub(shl(UINT64_S_ONE,63),UINT64_S_ONE);
+    t = uint64_s_shr(x,63);
+    tmp = uint64_s_or(uint64_s_shl(x,10),uint64_s_shl(UINT64_S_ONE,62));
+    mask = uint64_s_sub(uint64_s_shl(UINT64_S_ONE,63),UINT64_S_ONE);
     xi = uint64_s_and(tmp,mask);
     tmp = uint64_s_neg(t);
     xi = uint64_s_add(uint64_s_xor(xi,tmp),t);
@@ -429,10 +421,10 @@ fpr_trunc(fpr x) {
      * the absolute value into the 2^62..2^63-1 range, and then
      * do a right shift afterwards.
      */
-    tmp = shr(x,52);
+    tmp = uint64_s_shr(x,52);
     e = (int)(tmp.t[0]) & 0x7FF;
-    tmp = uint64_s_or(shl(x,10),shl((uint64_s){{1,0}},62));
-    mask = uint64_s_add(shl((uint64_s){{1,0}},63),(uint64_s){{0xffffffff,0xffffffff}});
+    tmp = uint64_s_or(uint64_s_shl(x,10),uint64_s_shl((uint64_s){{1,0}},62));
+    mask = uint64_s_add(uint64_s_shl((uint64_s){{1,0}},63),(uint64_s){{0xffffffff,0xffffffff}});
     xu = uint64_s_and(tmp,mask);
     cc = 1085 - e;
     xu = fpr_ursh(xu, cc & 63);
@@ -450,7 +442,7 @@ fpr_trunc(fpr x) {
     /*
      * Apply back the sign, if the source value is negative.
      */
-    t = shr(x, 63);
+    t = uint64_s_shr(x, 63);
     mask = uint64_s_add(uint64_s_not(t),(uint64_s){{1,0}});
     tmp = uint64_s_xor(xu,mask);
     xu = uint64_s_add(tmp,t);
@@ -478,7 +470,7 @@ fpr_add(fpr x, fpr y) {
      */
 
 
-    tmp = shl(UINT64_S_ONE,63);
+    tmp = uint64_s_shl(UINT64_S_ONE,63);
     m = uint64_s_sub(tmp,UINT64_S_ONE);
     za = uint64_s_sub(uint64_s_and(x,m),uint64_s_and(y,m));
     tmp = uint64_s_sub((uint64_s){{0,0}},za);
@@ -500,27 +492,27 @@ fpr_add(fpr x, fpr y) {
      * an operand is zero, its mantissa is set to 0 at this step, and
      * its exponent will be -1078.
      */
-    tmp = shr(x,52);
+    tmp = uint64_s_shr(x,52);
     ex = (int)(tmp.t[0]);
     sx = ex >> 11;
     ex &= 0x7FF;
     tmp.t[1] = 0;
     tmp.t[0] = (uint32_t)((ex + 0x7FF) >> 11);
-    m = shl(tmp,52);
-    mask = uint64_s_sub(shl(UINT64_S_ONE,52),UINT64_S_ONE);
+    m = uint64_s_shl(tmp,52);
+    mask = uint64_s_sub(uint64_s_shl(UINT64_S_ONE,52),UINT64_S_ONE);
 	tmp = uint64_s_or(uint64_s_and(x,mask),m);
-    xu = shl(tmp,3);
+    xu = uint64_s_shl(tmp,3);
     ex -= 1078;
-    tmp = shr(y,52);
+    tmp = uint64_s_shr(y,52);
     ey = (int)(tmp.t[0]);
     sy = ey >> 11;
     ey &= 0x7FF;
     tmp.t[1] = 0;
     tmp.t[0] = (uint32_t)((ey + 0x7FF) >> 11);
-    m = shl(tmp,52);
-    mask = uint64_s_sub(shl(UINT64_S_ONE,52),UINT64_S_ONE);
+    m = uint64_s_shl(tmp,52);
+    mask = uint64_s_sub(uint64_s_shl(UINT64_S_ONE,52),UINT64_S_ONE);
 	tmp = uint64_s_or(uint64_s_and(y,mask),m);
-    yu = shl(tmp,3);
+    yu = uint64_s_shl(tmp,3);
     ey -= 1078;
 
 
@@ -559,7 +551,7 @@ fpr_add(fpr x, fpr y) {
     tmp.t[1] = 0;
     tmp.t[0] = (uint32_t)(sx ^ sy);
     mask = uint64_s_sub((uint64_s){{0,0}},tmp);
-    tmp = uint64_s_and(shl(yu,1),mask);
+    tmp = uint64_s_and(uint64_s_shl(yu,1),mask);
     tmp = uint64_s_sub(yu,tmp);
     xu = uint64_s_add(xu,tmp);
 
@@ -577,7 +569,7 @@ fpr_add(fpr x, fpr y) {
     tmp.t[1] = 0;
     tmp.t[0] = ((uint32_t)xu.t[0] & 0x1FF) + 0x1FF;
     xu = uint64_s_or(xu,tmp);
-    xu = shr(xu,9);
+    xu = uint64_s_shr(xu,9);
     ex += 9;
 
     /*
@@ -637,7 +629,7 @@ fpr_half(fpr x) {
 
     uint64_s tmp;
 
-    tmp = shl((uint64_s){{1,0}},52);
+    tmp = uint64_s_shl((uint64_s){{1,0}},52);
     x = uint64_s_sub(x,tmp);
     t = (((uint32_t)(x.t[1] >> 20) & 0x7FF) + 1) >> 11;
     tmp.t[1] = 0;
@@ -655,9 +647,9 @@ fpr_double(fpr x) {
      * special case.
      */
     uint64_s tmp;
-	tmp = shr(x,52);
+	tmp = uint64_s_shr(x,52);
 	tmp.t[0] = ((((unsigned)(tmp.t[0]) & 0x7FFU) + 0x7FFU) >> 11);
-    tmp = shl(tmp,52);
+    tmp = uint64_s_shl(tmp,52);
     x = uint64_s_add(x,tmp);
     return x;
 }
@@ -676,7 +668,7 @@ fpr_mul(fpr x, fpr y) {
 	// printf("x * y\n");
     // print_uint64_s(&x,1);
     // print_uint64_s(&y,1);
-    mask = shl((uint64_s){{1,0}},52);
+    mask = uint64_s_shl((uint64_s){{1,0}},52);
     tmp = uint64_s_sub(mask,(uint64_s){{1,0}});
     xu = uint64_s_or(uint64_s_and(x,tmp),mask);
     yu = uint64_s_or(uint64_s_and(y,tmp),mask);
@@ -688,22 +680,22 @@ fpr_mul(fpr x, fpr y) {
      * reasons explained later on.
      */
     x0 = (uint32_t)xu.t[0] & 0x01FFFFFF;
-    tmp = shr(xu,25);
+    tmp = uint64_s_shr(xu,25);
     x1 = (uint32_t)(tmp.t[0]);
     y0 = (uint32_t)yu.t[0] & 0x01FFFFFF;
-    tmp = shr(yu,25);
+    tmp = uint64_s_shr(yu,25);
     y1 = (uint32_t)(tmp.t[0]);
     w = uint32_t_mul(x0,y0);
     z0 = (uint32_t)w.t[0] & 0x01FFFFFF;
-    tmp = shr(w,25);
+    tmp = uint64_s_shr(w,25);
     z1 = (uint32_t)(tmp.t[0]);
     w = uint32_t_mul(x0,y1);
     z1 += (uint32_t)w.t[0] & 0x01FFFFFF;
-    tmp = shr(w,25);
+    tmp = uint64_s_shr(w,25);
     z2 = (uint32_t)(tmp.t[0]);
     w = uint32_t_mul(x1,y0);
     z1 += (uint32_t)w.t[0] & 0x01FFFFFF;
-    tmp = shr(w,25);
+    tmp = uint64_s_shr(w,25);
     z2 += (uint32_t)(tmp.t[0]);
     zu = uint32_t_mul(x1,y1);
     z2 += (z1 >> 25);
@@ -730,8 +722,8 @@ fpr_mul(fpr x, fpr y) {
      * bit too large at this point. This is done with a conditional
      * right-shift that takes into account the sticky bit.
      */
-    zv = uint64_s_or(shr(zu,1),uint64_s_and(zu,(uint64_s){{1,0}}));
-    w = shr(zu,55);
+    zv = uint64_s_or(uint64_s_shr(zu,1),uint64_s_and(zu,(uint64_s){{1,0}}));
+    w = uint64_s_shr(zu,55);
     mask= uint64_s_sub((uint64_s){{0,0}},w);
     tmp = uint64_s_xor(zu,zv);
     tmp = uint64_s_and(tmp,mask);
@@ -751,9 +743,9 @@ fpr_mul(fpr x, fpr y) {
      * In total, we must add the exponents, then subtract
      * 2 * (1023 + 52), then add 50 + w.
      */
-    tmp = shr(x,52);
+    tmp = uint64_s_shr(x,52);
     ex = (int)((tmp.t[0]) & 0x7FF);
-    tmp = shr(y,52);
+    tmp = uint64_s_shr(y,52);
     ey = (int)((tmp.t[0]) & 0x7FF);
     e = ex + ey - 2100 + (int)w.t[0];
 
@@ -761,7 +753,7 @@ fpr_mul(fpr x, fpr y) {
      * Sign bit is the XOR of the operand sign bits.
      */
     tmp = uint64_s_xor(x,y);
-    tmp = shr(tmp,63);
+    tmp = uint64_s_shr(tmp,63);
     s = (int)(tmp.t[0]);
 
     /*
@@ -807,7 +799,7 @@ fpr_div(fpr x, fpr y) {
 	// printf("fpr_div\n");
 	// print_uint64_s(&x,1);
 	// print_uint64_s(&y,1);
-    mask = shl((uint64_s){{1,0}},52);
+    mask = uint64_s_shl((uint64_s){{1,0}},52);
     tmp = uint64_s_sub(mask,(uint64_s){{1,0}});
     xu = uint64_s_or(uint64_s_and(x,tmp),mask);
     yu = uint64_s_or(uint64_s_and(y,tmp),mask);
@@ -825,14 +817,14 @@ fpr_div(fpr x, fpr y) {
         uint64_s b;
 
         tmp = uint64_s_sub(xu,yu);
-        tmp = shr(tmp,63);
+        tmp = uint64_s_shr(tmp,63);
         b = uint64_s_sub(tmp,UINT64_S_ONE);
         tmp = uint64_s_and(b,yu);
         xu = uint64_s_sub(xu,tmp);
         tmp = uint64_s_and(b,(uint64_s){{1,0}});
         q = uint64_s_or(q,tmp);
-        xu = shl(xu,1);
-        q = shl(q,1);
+        xu = uint64_s_shl(xu,1);
+        q = uint64_s_shl(q,1);
     }
 	// printf("xu-yu\n");
 	// print_uint64_s(&xu,1);
@@ -845,7 +837,7 @@ fpr_div(fpr x, fpr y) {
      */
     tmp = uint64_s_sub((uint64_s){{0,0}},xu);
     tmp = uint64_s_or(xu,tmp);
-    tmp = shr(tmp,63);
+    tmp = uint64_s_shr(tmp,63);
     q = uint64_s_or(q,tmp);
 
     /*
@@ -856,8 +848,8 @@ fpr_div(fpr x, fpr y) {
      * 2^54..2^55-1 range (with the bottom bit being sticky).
      */
     tmp = uint64_s_and(q,(uint64_s){{1,0}});
-    q2 = uint64_s_or(shr(q,1),tmp);
-    w = shr(q,55);
+    q2 = uint64_s_or(uint64_s_shr(q,1),tmp);
+    w = uint64_s_shr(q,55);
     tmp = uint64_s_xor(q,q2);
     mask = uint64_s_sub((uint64_s){{0,0}},w);
     tmp = uint64_s_and(tmp,mask);
@@ -875,9 +867,9 @@ fpr_div(fpr x, fpr y) {
      *   - If w = 1, we right-shifted the integer by 1 bit,
      *     hence we must add 1 to the scaling.
      */
-    tmp = shr(x,52);
+    tmp = uint64_s_shr(x,52);
     ex = (int)((tmp.t[0]) & 0x7FF);
-    tmp = shr(y,52);
+    tmp = uint64_s_shr(y,52);
     ey = (int)((tmp.t[0]) & 0x7FF);
     e = ex - ey - 55 + (int)w.t[0];
 
@@ -885,7 +877,7 @@ fpr_div(fpr x, fpr y) {
      * Sign is the XOR of the signs of the operands.
      */
     tmp = uint64_s_xor(x,y);
-    tmp = shr(tmp,63);
+    tmp = uint64_s_shr(tmp,63);
     s = (int)(tmp.t[0]);
 
     /*
@@ -932,10 +924,10 @@ fpr_sqrt(fpr x) {
      * We want the "true" exponent corresponding to a mantissa
      * in the 1..2 range.
      */
-    mask = shl((uint64_s){{1,0}},52);
+    mask = uint64_s_shl((uint64_s){{1,0}},52);
     tmp = uint64_s_sub(mask,(uint64_s){{1,0}});
     xu = uint64_s_or(uint64_s_and(x,tmp),mask);
-    tmp = shr(x,52);
+    tmp = uint64_s_shr(x,52);
     ex = (int)((tmp.t[0]) & 0x7FF);
     e = ex - 1023;
 
@@ -954,7 +946,7 @@ fpr_sqrt(fpr x) {
     /*
      * Double the mantissa.
      */
-    xu = shl(xu,1);
+    xu = uint64_s_shl(xu,1);
 
     /*
      * We now have a mantissa in the 2^53..2^55-1 range. It
@@ -964,23 +956,23 @@ fpr_sqrt(fpr x) {
      */
     q = (uint64_s){{0,0}};
     s = (uint64_s){{0,0}};
-    r = shl((uint64_s){{1,0}},53);
+    r = uint64_s_shl((uint64_s){{1,0}},53);
     for (int i = 0; i < 54; i ++) {
         uint64_s t, b;
 
         t = uint64_s_add(s,r);
         tmp = uint64_s_sub(xu,t);
-        tmp = shr(tmp,63);
+        tmp = uint64_s_shr(tmp,63);
         b = uint64_s_sub(tmp,(uint64_s){{1,0}});
-        tmp = shl(r,1);
+        tmp = uint64_s_shl(r,1);
         tmp = uint64_s_and(tmp,b);
         s = uint64_s_add(s,tmp);
         tmp = uint64_s_and(t,b);
         xu = uint64_s_sub(xu,tmp);
         tmp = uint64_s_and(r,b);
         q = uint64_s_add(q,tmp);
-        xu = shl(xu,1);
-        r = shr(r,1);
+        xu = uint64_s_shl(xu,1);
+        r = uint64_s_shr(r,1);
     }
 
     /*
@@ -988,10 +980,10 @@ fpr_sqrt(fpr x) {
      * 52 fractional digits, and an additional guard bit. We add
      * an extra sticky bit to account for what remains of the operand.
      */
-    q = shl(q,1);
+    q = uint64_s_shl(q,1);
     tmp = uint64_s_neg(xu);
     tmp = uint64_s_or(xu,tmp);
-    tmp = shr(tmp,63);
+    tmp = uint64_s_shr(tmp,63);
     q = uint64_s_or(q,tmp);
 
     /*
@@ -1057,7 +1049,7 @@ fpr_lt(fpr x, fpr y) {
     tmp = int64_s_shr(tmp,63);
     cc0 = (int)(tmp.t[0]) & 1; /* Neither subtraction overflows when */
     tmp = uint64_s_sub(sy,sx);
-    tmp = shr(tmp,63);
+    tmp = uint64_s_shr(tmp,63);
     cc1 = (int)(tmp.t[0]) & 1; /* the signs are the same. */
 
     tmp = uint64_s_and(x,y);
@@ -1121,7 +1113,7 @@ static const uint64_s C[] = {
 
     y = C[0];
     tmp = fpr_trunc(fpr_mul(x, fpr_ptwo63));
-    z = shl(tmp, 1);
+    z = uint64_s_shl(tmp, 1);
     for (u = 1; u < (sizeof C) / sizeof(C[0]); u ++) {
         /*
          * Compute product z * y over 128 bits, but keep only
@@ -1141,14 +1133,14 @@ static const uint64_s C[] = {
         y0 = (uint32_t)y.t[0];
         y1 = (uint32_t)(y.t[1]);
         tmp = uint32_t_mul(z0,y0);
-        tmp = shr(tmp,32);
+        tmp = uint64_s_shr(tmp,32);
         a = uint64_s_add(uint32_t_mul(z0,y1),tmp);
         b = uint32_t_mul(z1,y0);
-        c = uint64_s_add(shr(a,32),shr(b,32));
+        c = uint64_s_add(uint64_s_shr(a,32),uint64_s_shr(b,32));
         a.t[1] = 0;
         b.t[1] = 0;
         tmp = uint64_s_add(a,b);
-        tmp = shr(tmp,32);
+        tmp = uint64_s_shr(tmp,32);
         c = uint64_s_add(c,tmp);
         tmp = uint32_t_mul(z1,y1);
         c = uint64_s_add(c,tmp);
@@ -1161,20 +1153,20 @@ static const uint64_s C[] = {
      * same format, and do an extra integer multiplication.
      */
     tmp = fpr_trunc(fpr_mul(ccs, fpr_ptwo63));
-    z = shl(tmp,1);
+    z = uint64_s_shl(tmp,1);
     z0 = (uint32_t)z.t[0];
     z1 = (uint32_t)(z.t[1]);
     y0 = (uint32_t)y.t[0];
     y1 = (uint32_t)(y.t[1]);
     tmp = uint32_t_mul(z0,y0);
-    tmp = shr(tmp,32);
+    tmp = uint64_s_shr(tmp,32);
     a = uint64_s_add(uint32_t_mul(z0,y1),tmp);
     b = uint32_t_mul(z1,y0);
-    y = uint64_s_add(shr(a,32),shr(b,32));
+    y = uint64_s_add(uint64_s_shr(a,32),uint64_s_shr(b,32));
     a.t[1] = 0;
     b.t[1] = 0;
     tmp = uint64_s_add(a,b);
-    tmp = shr(tmp,32);
+    tmp = uint64_s_shr(tmp,32);
     y = uint64_s_add(y,tmp);
     tmp = uint32_t_mul(z1,y1);
     y = uint64_s_add(y,tmp);
